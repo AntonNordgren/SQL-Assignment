@@ -14,7 +14,6 @@ CREATE TABLE Jackets(
     Size CHAR NOT NULL,
 	Model VARCHAR(15) NOT NULL,
     Material VARCHAR(15) NOT NULL,
-    PRIMARY KEY (Model),
     FOREIGN KEY (PersonNr) REFERENCES Players(PersonNr)
 );
 
@@ -27,6 +26,11 @@ CREATE TABLE Competitions(
 CREATE TABLE Players_Competitions(
 	PersonNr VARCHAR(15) NOT NULL,
     CompetitionName VARCHAR(20) NOT NULL,
+    CONSTRAINT PK_Players_Competitions PRIMARY KEY
+    (
+        PersonNr,
+        CompetitionName
+    ),
     FOREIGN KEY (PersonNr) REFERENCES Players(PersonNr),
     FOREIGN KEY (CompetitionName) REFERENCES Competitions(CompetitionName)
 );
@@ -35,6 +39,11 @@ CREATE TABLE Competitions_Rains(
 	CompetitionName VARCHAR(20) NOT NULL,
 	RainType VARCHAR(20) NOT NULL,
     RainTime TIME NOT NULL,
+    CONSTRAINT PK_Competitions_Rains PRIMARY KEY
+    (
+        CompetitionName,
+        RainType
+    ),
     FOREIGN KEY (CompetitionName) REFERENCES Competitions(CompetitionName),
     FOREIGN KEY (RainType) REFERENCES Rains(RainType)
 );
@@ -47,18 +56,16 @@ CREATE TABLE Rains(
 
 CREATE TABLE Clubs(
 	PersonNr VARCHAR(15) NOT NULL,
-	ClubId INT NOT NULL AUTO_INCREMENT ,
     Material VARCHAR(20) NOT NULL,
-    PRIMARY KEY (ClubId),
-    FOREIGN KEY (PersonNr) REFERENCES Players(PersonNr)
+    SerialNr INT NOT NULL,
+    FOREIGN KEY (PersonNr) REFERENCES Players(PersonNr),
+    FOREIGN KEY (SerialNr) REFERENCES Constructions(SerialNr)
 );
 
 CREATE TABLE Constructions(
-	SerialNr INT NOT NULL AUTO_INCREMENT,
-	ClubId INT NOT NULL UNIQUE,
+	SerialNr INT NOT NULL,
 	Hardness INT NOT NULL,
-    PRIMARY KEY(SerialNr),
-    FOREIGN KEY(ClubId) REFERENCES Clubs(ClubId)
+    PRIMARY KEY (SerialNr)
 );
 
 INSERT INTO Players (PersonNr, Name, Age) VALUES ('1996-03-23', 'Johan Andersson', 25);
@@ -78,13 +85,14 @@ INSERT INTO Competitions_Rains (CompetitionName, RainType, RainTime) VALUES ('Bi
 INSERT INTO Jackets (PersonNr, Size, Model, Material) VALUES ('1996-03-23', 'M', 'Model1', 'Fleece');
 INSERT INTO Jackets (PersonNr, Size, Model, Material) VALUES ('1996-03-23', 'M', 'Model2', 'Goretex');
 
-INSERT INTO Clubs (PersonNr, Material) VALUES ('1993-04-02', 'Wood');
-INSERT INTO Clubs (PersonNr, Material) VALUES ('1988-07-14', 'Wood');
-INSERT INTO Clubs (PersonNr, Material) VALUES ('1996-03-23', 'Wood');
+INSERT INTO Constructions (SerialNr, Hardness) VALUES (1, 10);
+INSERT INTO Constructions (SerialNr, Hardness) VALUES (2, 5);
+INSERT INTO Constructions (SerialNr, Hardness) VALUES (3, 7);
 
-INSERT INTO Constructions (ClubId, Hardness) VALUES (1, 10);
-INSERT INTO Constructions (ClubId, Hardness) VALUES (2, 5);
-INSERT INTO Constructions (ClubId, Hardness) VALUES (3, 7);
+INSERT INTO Clubs (PersonNr, Material, SerialNr) VALUES ('1993-04-02', 'Wood', 1);
+INSERT INTO Clubs (PersonNr, Material, SerialNr) VALUES ('1988-07-14', 'Wood', 2);
+INSERT INTO Clubs (PersonNr, Material, SerialNr) VALUES ('1996-03-23', 'Wood', 3);
+
 
 
 SELECT Players.Age FROM Players WHERE Players.PersonNr = '1996-03-23';
@@ -103,29 +111,8 @@ SELECT * FROM PLAYERS WHERE Players.Age < 30;
 
 DELETE FROM Jackets WHERE Jackets.PersonNr = '1996-03-23';
 
-SELECT * FROM Constructions;
-
-SELECT * FROM Clubs;
-
-DELETE FROM Constructions WHERE Constructions.ClubId = 1;
 DELETE FROM Clubs WHERE Clubs.PersonNr = '1993-04-02';
 DELETE FROM Players_Competitions WHERE Players_Competitions.PersonNr = '1993-04-02';
 DELETE FROM Players WHERE Players.PersonNr = '1993-04-02';
 
 SELECT AVG(Players.Age) FROM Players;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
