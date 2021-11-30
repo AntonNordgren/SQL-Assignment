@@ -14,6 +14,7 @@ CREATE TABLE Jackets(
     Size CHAR NOT NULL,
 	Model VARCHAR(15) NOT NULL,
     Material VARCHAR(15) NOT NULL,
+    PRIMARY KEY (PersonNr, Model),
     FOREIGN KEY (PersonNr) REFERENCES Players(PersonNr)
 );
 
@@ -58,6 +59,7 @@ CREATE TABLE Clubs(
 	PersonNr VARCHAR(15) NOT NULL,
     Material VARCHAR(20) NOT NULL,
     SerialNr INT NOT NULL,
+    PRIMARY KEY (PersonNr, Material),
     FOREIGN KEY (PersonNr) REFERENCES Players(PersonNr),
     FOREIGN KEY (SerialNr) REFERENCES Constructions(SerialNr)
 );
